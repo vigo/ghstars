@@ -25,8 +25,10 @@ var (
 	client *github.Client
 	user   string
 
-	errGitHubAccessTokenRequired = errors.New("please set GITHUB_ACCESS_TOKEN environment variable")
-	errInvalidTimeout            = errors.New("invalid timeout value")
+	errUserNameOrGitHubAccessTokenRequired = errors.New(
+		"please pass github user name or set GITHUB_ACCESS_TOKEN environment variable",
+	)
+	errInvalidTimeout = errors.New("invalid timeout value")
 
 	OptVersion      *bool
 	OptVerboseMode  *bool
@@ -86,33 +88,42 @@ func (g *GHStars) Run() error {
 	}
 
 	timeout := time.Duration(*OptTimeout) * time.Second
-	if *OptVerboseMode {
-		fmt.Fprintf(g.Out, "[verbose] default timeout is set to: %d seconds\n", *OptTimeout)
-	}
+
+	var ghTokenSet bool
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	if flag.Arg(0) != "" {
-		user = flag.Arg(0)
-		client = github.NewClient(nil)
-		if *OptVerboseMode {
-			fmt.Fprintf(g.Out, "[verbose] will fetch w/o authentication, user is %s\n", user)
-		}
-	} else {
-		token, ok := os.LookupEnv("GITHUB_ACCESS_TOKEN")
-		if !ok {
-			return errGitHubAccessTokenRequired
-		}
-
+	token, ok := os.LookupEnv("GITHUB_ACCESS_TOKEN")
+	if ok {
 		ts := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: token},
 		)
 		tc := oauth2.NewClient(ctx, ts)
+
 		client = github.NewClient(tc)
+
 		if *OptVerboseMode {
 			fmt.Fprintln(g.Out, "[verbose] will fetch with using github access token")
 		}
+		ghTokenSet = true
+	}
+
+	if !ok && flag.Arg(0) != "" {
+		user = flag.Arg(0)
+		client = github.NewClient(nil)
+
+		if *OptVerboseMode {
+			fmt.Fprintf(g.Out, "[verbose] will fetch w/o authentication, user is %s\n", user)
+		}
+	}
+
+	if !ok && flag.Arg(0) == "" {
+		return errUserNameOrGitHubAccessTokenRequired
+	}
+
+	if *OptVerboseMode {
+		fmt.Fprintf(g.Out, "[verbose] default timeout is set to: %d seconds\n", *OptTimeout)
 	}
 
 	var allRepos []*github.Repository
@@ -147,6 +158,10 @@ func (g *GHStars) Run() error {
 
 		for p := 2; p <= resp.LastPage; p++ {
 			wg.Add(1)
+
+			if *OptVerboseMode {
+				fmt.Fprintf(g.Out, "[verbose] current page: %d, last page: %d\n", p, resp.LastPage)
+			}
 
 			go func(p int) {
 				defer wg.Done()
@@ -192,17 +207,17 @@ func (g *GHStars) Run() error {
 	var count int
 	result := map[string]int{}
 
-	if user != "" {
+	if ghTokenSet {
 		for _, repo := range allRepos {
-			if *repo.StargazersCount > 0 && !*repo.Fork {
+			perms := *repo.Permissions
+			if *repo.StargazersCount > 0 && perms["admin"] && !*repo.Fork {
 				result[*repo.FullName] = *repo.StargazersCount
 				count += *repo.StargazersCount
 			}
 		}
 	} else {
 		for _, repo := range allRepos {
-			perms := *repo.Permissions
-			if *repo.StargazersCount > 0 && perms["admin"] && !*repo.Fork {
+			if *repo.StargazersCount > 0 && !*repo.Fork {
 				result[*repo.FullName] = *repo.StargazersCount
 				count += *repo.StargazersCount
 			}
