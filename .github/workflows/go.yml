@@ -42,7 +42,7 @@ jobs:
       with:
         status: ${{ job.status }}
         notification_title: 'Build succeeded'
-        message_format: 'Statoo build succeeded. <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>'
+        message_format: 'ghstars build succeeded. <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>'
         footer: 'repo: <{repo_url}|{repo}>'
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
