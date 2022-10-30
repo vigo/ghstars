@@ -20,7 +20,7 @@ usage: [GITHUB_ACCESS_TOKEN=<token>] %[1]s [-flags] [username]
   $ GITHUB_ACCESS_TOKEN="<token>" %[1]s star count of <token> owner
 
   $ %[1]s -s vigo                 just show count
-  $ %[1]s -s fatig                just show count
+  $ %[1]s -s fatih                just show count
 
   $ %[1]s -verbose tj             display in verbose mode
   $ %[1]s -verbose -simple tj     display in verbose mode and just count
