@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.1.1-orange.svg)
+![Version](https://img.shields.io/badge/version-0.1.2-orange.svg)
 ![Go](https://img.shields.io/github/go-mod/go-version/vigo/ghstars)
 [![Documentation](https://godoc.org/github.com/vigo/ghstars?status.svg)](https://pkg.go.dev/github.com/vigo/ghstars)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vigo/ghstars)](https://goreportcard.com/report/github.com/vigo/ghstars)
