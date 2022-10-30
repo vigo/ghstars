@@ -22,7 +22,7 @@ fetch all of your repo’s star count!
 ## Installation
 
 ```bash
-go install github.com/vigo/ghstars@latest
+go install github.com/vigo/ghstars/cmd/ghstars@latest
 ```
 
 ## Usage
