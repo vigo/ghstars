@@ -5,8 +5,10 @@
 ![Go Build Status](https://github.com/vigo/ghstars/actions/workflows/go.yml/badge.svg)
 ![GolangCI-Lint Status](https://github.com/vigo/ghstars/actions/workflows/golang-lint.yml/badge.svg)
 [![codecov](https://codecov.io/gh/vigo/ghstars/branch/main/graph/badge.svg?token=BTVK8VKVZM)](https://codecov.io/gh/vigo/ghstars)
-
-
+![Docker Lint Status](https://github.com/vigo/ghstars/actions/workflows/docker-lint.yml/badge.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/vigo/ghstars)
+![Docker Size](https://img.shields.io/docker/image-size/vigo/ghstars)
+![Docker Build Status](https://github.com/vigo/ghstars/actions/workflows/dockerhub.yml/badge.svg)
 
 # ghstars
 
@@ -54,6 +56,18 @@ According to [GitHub][2];
 - For unauthenticated requests, the rate limit allows for up to **60
   requests** per hour.
 - **5000 requests** per hour and per authenticated user.
+
+---
+
+## Docker
+
+https://hub.docker.com/r/vigo/ghstars/
+
+```bash
+# latest
+docker run vigo/ghstars -h
+docker run vigo/ghstars fatih
+```
 
 ---
 
