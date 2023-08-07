@@ -9,6 +9,8 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/vigo/ghstars)
 ![Docker Size](https://img.shields.io/docker/image-size/vigo/ghstars)
 ![Docker Build Status](https://github.com/vigo/ghstars/actions/workflows/dockerhub.yml/badge.svg)
+![Powered by Rake](https://img.shields.io/badge/powered_by-rake-blue?logo=ruby)
+
 
 # ghstars
 
